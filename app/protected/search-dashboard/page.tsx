@@ -23,15 +23,13 @@ export default async function ProtectedPage() {
         <div className="text-lg font-semibold">Healthcare Pricing App</div>
         <AuthButton />
       </nav>
-      
-      <div className="flex flex-col items-center w-full max-w-4xl p-6">
-        <main className="flex flex-col items-center w-full bg-gray-800 shadow-lg rounded-md p-8">
-          <h1 className="text-3xl font-bold mb-6 text-teal-400">Cigna Price Transparency App</h1>
-          <p className="text-lg mb-8 text-gray-300">Search for medical procedure costs by CPT code and zip code.</p>
-          <div className="w-full max-w-md">
-            <Billings />
-          </div>
-        </main>
+
+      <div className="flex flex-col items-center w-full p-6">
+        <h1 className="text-3xl font-bold mb-6 text-teal-400">Cigna Price Transparency App</h1>
+        <p className="text-lg mb-8 text-gray-300">Search for medical procedure costs by CPT code and zip code.</p>
+        <div className="w-full">
+          <Billings />
+        </div>
       </div>
 
       <footer className="w-full border-t border-gray-700 p-4 flex justify-center text-gray-500 text-sm">
