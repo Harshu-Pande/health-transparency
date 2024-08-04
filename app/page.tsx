@@ -1,7 +1,17 @@
 import AuthButton from "../components/AuthButton";
 import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
+
+
 
 export default async function Index() {
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getUser()
+
+  if (data.user) {
+    return redirect('/protected/search-dashboard')
+  };
+
   return (
     <div className="flex flex-col items-center w-full min-h-screen gap-10 bg-gray-900 text-white">
       <nav className="w-full flex justify-between items-center border-b border-gray-700 h-16 px-4">
@@ -11,7 +21,7 @@ export default async function Index() {
       <main className="flex flex-col items-center w-full max-w-3xl py-16 px-4 bg-gray-800 shadow-lg rounded-md">
         <h1 className="text-4xl font-bold mb-6 text-teal-400">Healthcare Transparency</h1>
         <p className="text-lg mb-10 text-gray-300">
-          Discover the latest updates and details about the recent government act on healthcare transparency. 
+          Discover the latest updates and details about the recent government act on healthcare transparency.
           This act aims to provide clarity on negotiated rates and pricing, helping you make informed healthcare decisions.
         </p>
       </main>
