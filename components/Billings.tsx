@@ -87,10 +87,10 @@ function Billings() {
     setLoading(true);
     setError('');
     setHospitals([]);
-    
+
     try {
       const response = await axios.post(
-        'https://kcklbzeaocexdwhcsiat.supabase.co/rest/v1/rpc/get_cigna_hospitals',
+        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/rpc/get_cigna_hospitals`,
         {
           billing_code: selectedProcedure.cptCode,
           zip_code: zipCode,
@@ -98,8 +98,8 @@ function Billings() {
         {
           headers: {
             'Content-Type': 'application/json',
-            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtja2xiemVhb2NleGR3aGNzaWF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk3NzI3MTksImV4cCI6MjAzNTM0ODcxOX0.T7ooLFl6wuHF9FYlaVInWk4_ctvgpjjy7Q2trqiSkOM',
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtja2xiemVhb2NleGR3aGNzaWF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk3NzI3MTksImV4cCI6MjAzNTM0ODcxOX0.T7ooLFl6wuHF9FYlaVInWk4_ctvgpjjy7Q2trqiSkOM',
+            'apikey': `${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
           },
         }
       );
@@ -117,18 +117,18 @@ function Billings() {
     setShowDropdown(false);
   };
 
-  const filteredProcedures = searchTerm 
+  const filteredProcedures = searchTerm
     ? fuse.search(searchTerm).map((result: { item: any; }) => result.item)
     : medicalProcedures;
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-          <h1 className="text-2xl font-semibold mb-5">Cigna Price Transparency App</h1>
-          <form onSubmit={handleSearch} className="mb-5">
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-12">
+      <div className="w-full max-w-md px-8">
+        <div className="bg-gray-800 shadow-lg rounded-3xl p-8 space-y-6">
+          <h1 className="text-3xl font-semibold text-center text-teal-300">Cigna Price Transparency App</h1>
+          <form onSubmit={handleSearch}>
             <div className="mb-4 relative">
-              <label htmlFor="procedureSearch" className="block text-gray-700 text-sm font-bold mb-2">
+              <label htmlFor="procedureSearch" className="block text-teal-300 text-sm font-bold mb-2">
                 Medical Procedure or CPT Code
               </label>
               <input
@@ -146,12 +146,12 @@ function Billings() {
                 required
               />
               {showDropdown && (
-                <ul className="absolute z-10 w-full bg-white border border-gray-300 mt-1 max-h-60 overflow-auto">
+                <ul className="absolute z-10 w-full bg-gray-700 border border-gray-600 mt-1 max-h-60 overflow-auto">
                   {filteredProcedures.map((procedure: { name: any; cptCode: any; }, index: React.Key | null | undefined) => (
                     <li
                       key={index}
                       onClick={() => handleProcedureSelect(procedure)}
-                      className="cursor-pointer hover:bg-gray-100 p-2"
+                      className="cursor-pointer hover:bg-gray-600 p-2"
                     >
                       {procedure.name} ({procedure.cptCode})
                     </li>
@@ -160,7 +160,7 @@ function Billings() {
               )}
             </div>
             <div className="mb-4">
-              <label htmlFor="zipCode" className="block text-gray-700 text-sm font-bold mb-2">
+              <label htmlFor="zipCode" className="block text-teal-300 text-sm font-bold mb-2">
                 Zip Code
               </label>
               <input
@@ -174,23 +174,23 @@ function Billings() {
             </div>
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
               disabled={loading}
             >
               {loading ? 'Searching...' : 'Search'}
             </button>
           </form>
-          {error && <p className="text-red-500 mb-5">{error}</p>}
+          {error && <p className="text-red-500 text-center">{error}</p>}
           {hospitals.length > 0 && (
             <div>
-              <h2 className="text-xl font-semibold mb-3">Results</h2>
+              <h2 className="text-xl font-semibold mb-3 text-center">Results</h2>
               <ul className="space-y-4">
                 {hospitals.map((hospital: any, index) => (
                   <li key={index} className="border-b pb-4">
                     <p className="font-semibold">{hospital.organization_name}</p>
                     <p>{hospital.address_line_1}</p>
                     <p>{hospital.city}, {hospital.state}</p>
-                    <p className="text-green-600 font-semibold">${parseFloat(hospital.negotiated_rate).toFixed(2)}</p>
+                    <p className="text-green-400 font-semibold">${parseFloat(hospital.negotiated_rate).toFixed(2)}</p>
                   </li>
                 ))}
               </ul>
