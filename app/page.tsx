@@ -2,17 +2,6 @@ import AuthButton from "../components/AuthButton";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function Index() {
-  const canInitSupabaseClient = () => {
-    try {
-      createClient();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  };
-
-  const isSupabaseConnected = canInitSupabaseClient();
-
   return (
     <div className="flex flex-col items-center w-full min-h-screen gap-10 bg-gray-900 text-white">
       <nav className="w-full flex justify-between items-center border-b border-gray-700 h-16 px-4">
